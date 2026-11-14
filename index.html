@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>VECTRA — Разработка современных сайтов-визиток под ключ</title>
+    <meta name="description" content="Создаем быстрые, стильные и адаптивные сайты-визитки для самозанятых, мастеров и малого бизнеса по всей России. Запуск от 24 часов, заявки сразу в Telegram.">
+    <!-- Шрифты Inter и Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Иконки Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        obsidian: {
+                            bg: '#09090b',
+                            surface: '#111115',
+                            card: '#16161d',
+                            border: '#24242f',
+                            hover: '#1e1e28'
+                        },
+                        vectra: {
+                            indigo: '#6366f1',
+                            indigoHover: '#4f46e5',
+                            violet: '#8b5cf6',
+                            emerald: '#10b981',
+                            emeraldHover: '#059669'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            background-color: #09090b;
+            color: #fafafa;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Динамическая типографика для плавного масштабирования на смартфонах */
+        .hero-title {
+            font-size: clamp(1.85rem, 5.2vw, 3.85rem);
+            line-height: 1.12;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3.6vw, 2.5rem);
+            line-height: 1.2;
+        }
+
+        /* Фоновое свечение */
+        .vectra-glow {
+            background:
+                radial-gradient(circle at 50% -10%, rgba(99, 102, 241, 0.22) 0%, rgba(139, 92, 246, 0.08) 38%, rgba(9, 9, 11, 0) 70%),
+                radial-gradient(circle at 85% 25%, rgba(16, 185, 129, 0.08) 0%, rgba(9, 9, 11, 0) 50%);
+        }
+
+        /* Тонкая сетка на фоне первого экрана */
+        .bg-grid {
+            background-size: 36px 36px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        }
+
+        /* Плавный подъем карточек */
+        .card-elevate {
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .card-elevate:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 18px 38px -14px rgba(99, 102, 241, 0.25);
+        }
+
+        /* Плавное мобильное меню */
+        #mobile-drawer {
+            transition: max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #mobile-drawer.open {
+            max-height: 420px;
+            opacity: 1;
+        }
+
+        /* Touch-friendly минимальная высота интерактивных элементов */
+        .touch-target {
+            min-height: 44px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-vectra-indigo selection:text-white">
+
+    <!-- ==================== ШАПКА (HEADER) ==================== -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-obsidian-bg/85 border-b border-obsidian-border">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
+            <!-- Геометрический логотип VECTRA -->
+            <a href="#" class="flex items-center gap-2.5 group shrink-0 touch-target">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-vectra-indigo via-vectra-violet to-vectra-emerald p-[1.5px] shadow-lg shadow-vectra-indigo/20 group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full rounded-[10px] bg-obsidian-bg flex items-center justify-center">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path d="M4 5L12 19L20 5H15.8L12 12.2L8.2 5H4Z" fill="url(#vectraGrad)"/>
+                            <circle cx="12" cy="4.5" r="1.8" fill="#10B981"/>
+                            <defs>
+                                <linearGradient id="vectraGrad" x1="4" y1="5" x2="20" y2="19" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6366F1"/>
+                                    <stop offset="1" stop-color="#A855F7"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-display font-extrabold text-lg sm:text-xl tracking-wider text-white leading-none">
+                        VECTRA
+                    </span>
+                    <span class="text-[10px] font-medium text-slate-400 tracking-widest uppercase mt-0.5">
+                        web studio
+                    </span>
+                </div>
+            </a>
+
+            <!-- Навигация для десктопа -->
+            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-300">
+                <a href="#pricing" class="hover:text-white transition-colors py-2">Услуги и цены</a>
+                <a href="#portfolio" class="hover:text-white transition-colors py-2">Примеры работ</a>
+                <a href="#process" class="hover:text-white transition-colors py-2">Как работаем</a>
+                <a href="#order" class="hover:text-white transition-colors py-2">Оставить заявку</a>
+            </nav>
+
+            <!-- Кнопка Telegram и мобильный бургер -->
+            <div class="flex items-center gap-2.5">
+                <a href="https://t.me/vectra_web" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-vectra-indigo hover:bg-vectra-indigoHover text-white text-sm font-semibold transition-all shadow-lg shadow-vectra-indigo/25 touch-target">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>Написать в Telegram</span>
+                </a>
+
+                <button id="mobile-menu-btn" type="button" aria-label="Открыть меню навигации" aria-expanded="false" class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-xl bg-obsidian-card border border-obsidian-border text-slate-200 hover:text-white hover:border-vectra-indigo/50 transition-colors touch-target">
+                    <i id="menu-icon-open" data-lucide="menu" class="w-5 h-5"></i>
+                    <i id="menu-icon-close" data-lucide="x" class="w-5 h-5 hidden"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Выдвижное мобильное меню -->
+        <div id="mobile-drawer" class="lg:hidden bg-obsidian-surface border-b border-obsidian-border px-4">
+            <nav class="py-4 space-y-1.5">
+                <a href="#pricing" class="mobile-nav-link flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium text-slate-200 hover:bg-obsidian-hover touch-target">
+                    <span>Услуги и цены</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="#portfolio" class="mobile-nav-link flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium text-slate-200 hover:bg-obsidian-hover touch-target">
+                    <span>Примеры работ</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="#process" class="mobile-nav-link flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium text-slate-200 hover:bg-obsidian-hover touch-target">
+                    <span>Как работаем</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <a href="#order" class="mobile-nav-link flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium text-slate-200 hover:bg-obsidian-hover touch-target">
+                    <span>Оставить заявку</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
+                </a>
+                <div class="pt-2">
+                    <a href="https://t.me/vectra_web" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-vectra-indigo hover:bg-vectra-indigoHover text-white font-semibold text-base shadow-lg shadow-vectra-indigo/25 touch-target">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        <span>Написать в Telegram @vectra_web</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- ==================== ПЕРВЫЙ ЭКРАН (HERO) ==================== -->
+        <section class="relative vectra-glow bg-grid pt-10 pb-14 sm:pt-20 sm:pb-24 border-b border-obsidian-border">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+                <!-- Бейдж -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-obsidian-card/90 border border-obsidian-border text-xs sm:text-sm font-medium text-slate-300 mb-6 sm:mb-8 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-vectra-emerald animate-pulse shrink-0"></span>
+                    <span>Работаем по всей России • Запуск от 24 часов</span>
+                </div>
+
+                <!-- Заголовок -->
+                <h1 class="hero-title font-display font-extrabold tracking-tight text-white max-w-4xl mx-auto mb-5 sm:mb-6">
+                    Сайты-визитки, которые <span class="text-transparent bg-clip-text bg-gradient-to-r from-vectra-indigo via-vectra-violet to-vectra-emerald">приводят клиентов</span> из соцсетей и поиска
+                </h1>
+
+                <!-- Подзаголовок -->
+                <p class="max-w-2xl mx-auto text-sm sm:text-lg text-slate-400 leading-relaxed mb-8 sm:mb-10 px-1">
+                    Создаем быстрые, современные сайты для самозанятых мастеров, экспертов и малого бизнеса. Идеально открываются на любом смартфоне и отправляют заявки сразу в ваш Telegram — без ежемесячной платы за конструкторы.
+                </p>
+
+                <!-- Кнопки CTA -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 sm:gap-4 max-w-md sm:max-w-none mx-auto mb-12 sm:mb-16">
+                    <a href="#pricing" class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-vectra-indigo hover:bg-vectra-indigoHover text-white font-semibold text-base transition-all shadow-xl shadow-vectra-indigo/25 touch-target">
+                        <span>Выбрать тариф</span>
+                        <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </a>
+                    <a href="https://t.me/vectra_web" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl bg-obsidian-card hover:bg-obsidian-hover border border-obsidian-border text-white font-semibold text-base transition-all touch-target">
+                        <i data-lucide="send" class="w-4 h-4 text-vectra-indigo"></i>
+                        <span>Обсудить в Telegram</span>
+                    </a>
+                </div>
+
+                <!-- 4 компактных преимущества -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 text-left">
+                    <div class="p-4 sm:p-5 rounded-2xl bg-obsidian-card/90 border border-obsidian-border backdrop-blur-sm flex items-start gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-vectra-indigo/15 text-vectra-indigo flex items-center justify-center shrink-0">
+                            <i data-lucide="zap" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white text-sm sm:text-base">Запуск за 1–3 дня</div>
+                            <div class="text-xs sm:text-sm text-slate-400 mt-0.5">Первый готовый макет уже через 24 часа</div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-2xl bg-obsidian-card/90 border border-obsidian-border backdrop-blur-sm flex items-start gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-vectra-violet/15 text-vectra-violet flex items-center justify-center shrink-0">
+                            <i data-lucide="smartphone" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white text-sm sm:text-base">Адаптив под смартфоны</div>
+                            <div class="text-xs sm:text-sm text-slate-400 mt-0.5">80% клиентов заходят с телефона — сайт летает</div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-2xl bg-obsidian-card/90 border border-obsidian-border backdrop-blur-sm flex items-start gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-vectra-emerald/15 text-vectra-emerald flex items-center justify-center shrink-0">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white text-sm sm:text-base">0 ₽ абонентской платы</div>
+                            <div class="text-xs sm:text-sm text-slate-400 mt-0.5">Чистый код без подписок на конструкторы</div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-2xl bg-obsidian-card/90 border border-obsidian-border backdrop-blur-sm flex items-start gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white text-sm sm:text-base">Заявки сразу в Telegram</div>
+                            <div class="text-xs sm:text-sm text-slate-400 mt-0.5">Клиент пишет вам в мессенджер в один клик</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ТАРИФЫ И ЦЕНЫ ==================== -->
+        <section id="pricing" class="py-14 sm:py-24">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
+                    <span class="text-vectra-emerald font-semibold text-xs sm:text-sm uppercase tracking-wider">Доступный старт</span>
+                    <h2 class="section-title font-display font-bold text-white mt-2 mb-3">Тарифы и стоимость разработки</h2>
+                    <p class="text-slate-400 text-sm sm:text-lg">
+                        Честная фиксированная цена. Вы платите один раз за готовый сайт, который полностью принадлежит вам.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch">
+                    <!-- Тариф 1: Старт -->
+                    <div class="flex flex-col p-6 sm:p-8 rounded-3xl bg-obsidian-card border border-obsidian-border card-elevate">
+                        <div class="mb-5">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-obsidian-hover text-slate-300 text-xs font-semibold mb-3">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-vectra-indigo"></i>
+                                <span>Срок: 1 день</span>
+                            </div>
+                            <h3 class="text-2xl font-display font-bold text-white">Старт</h3>
+                            <p class="text-slate-400 text-sm mt-1.5">Компактная микро-визитка и современная замена Taplink</p>
+                        </div>
+
+                        <div class="mb-6 pb-6 border-b border-obsidian-border flex items-baseline gap-2">
+                            <span class="text-3xl sm:text-4xl font-display font-extrabold text-white">2 500 ₽</span>
+                            <span class="text-slate-400 text-sm">/ единоразово</span>
+                        </div>
+
+                        <ul class="space-y-3.5 text-sm text-slate-300 mb-8 flex-1">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span>1–2 аккуратных экрана с быстрой загрузкой</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span>Фото, описание специалиста и ключевые преимущества</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span>Понятный прайс-лист ваших услуг</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span>Кнопки быстрой связи в Telegram и соцсети</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span>Полная адаптация под любые смартфоны</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="globe" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span><strong>Выбор любого способа хостинга</strong> (бесплатный 0 ₽/мес или ваш домен)</span>
+                            </li>
+                        </ul>
+
+                        <button type="button" onclick="selectPlan('Старт — 2 500 ₽')" class="w-full py-3.5 px-5 rounded-xl bg-obsidian-hover hover:bg-vectra-indigo border border-obsidian-border hover:border-vectra-indigo text-white font-semibold text-sm sm:text-base transition-all touch-target">
+                            Выбрать Старт
+                        </button>
+                    </div>
+
+                    <!-- Тариф 2: Бизнес (Популярный / Хит) -->
+                    <div class="relative flex flex-col p-6 sm:p-8 rounded-3xl bg-obsidian-card border-2 border-vectra-indigo shadow-2xl shadow-vectra-indigo/15 card-elevate">
+                        <div class="absolute -top-3.5 right-6 px-3.5 py-1 rounded-full bg-gradient-to-r from-vectra-indigo to-vectra-violet text-white text-xs font-bold uppercase tracking-wider shadow-lg">
+                            Хит продаж
+                        </div>
+
+                        <div class="mb-5">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-vectra-indigo/15 text-indigo-300 text-xs font-semibold mb-3">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-vectra-indigo"></i>
+                                <span>Срок: 2–3 дня</span>
+                            </div>
+                            <h3 class="text-2xl font-display font-bold text-white">Бизнес</h3>
+                            <p class="text-slate-400 text-sm mt-1.5">Полноценный продающий лендинг для стабильного потока заявок</p>
+                        </div>
+
+                        <div class="mb-6 pb-6 border-b border-obsidian-border flex items-baseline gap-2">
+                            <span class="text-3xl sm:text-4xl font-display font-extrabold text-white">4 900 ₽</span>
+                            <span class="text-slate-400 text-sm">/ единоразово</span>
+                        </div>
+
+                        <ul class="space-y-3.5 text-sm text-slate-200 mb-8 flex-1">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-vectra-indigo shrink-0 mt-0.5"></i>
+                                <span>Полноценный одностраничный сайт (5–6 продуманных блоков)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-vectra-indigo shrink-0 mt-0.5"></i>
+                                <span>Галерея выполненных работ и сравнение «До / После»</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-vectra-indigo shrink-0 mt-0.5"></i>
+                                <span>Блок реальных отзывов клиентов и ответы на частые вопросы</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-vectra-indigo shrink-0 mt-0.5"></i>
+                                <span>Интерактивный прайс-лист с выбором услуг</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check-circle-2" class="w-5 h-5 text-vectra-indigo shrink-0 mt-0.5"></i>
+                                <span>Умная форма заявки с мгновенной отправкой в ваш Telegram</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="globe" class="w-5 h-5 text-vectra-indigo shrink-0 mt-0.5"></i>
+                                <span><strong>Выбор любого способа хостинга</strong> (бесплатный 0 ₽/мес или ваш домен)</span>
+                            </li>
+                        </ul>
+
+                        <button type="button" onclick="selectPlan('Бизнес — 4 900 ₽')" class="w-full py-3.5 px-5 rounded-xl bg-vectra-indigo hover:bg-vectra-indigoHover text-white font-semibold text-sm sm:text-base transition-all shadow-lg shadow-vectra-indigo/30 touch-target">
+                            Выбрать Бизнес
+                        </button>
+                    </div>
+
+                    <!-- Тариф 3: Под ключ -->
+                    <div class="flex flex-col p-6 sm:p-8 rounded-3xl bg-obsidian-card border border-obsidian-border card-elevate">
+                        <div class="mb-5">
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-vectra-emerald/15 text-emerald-300 text-xs font-semibold mb-3">
+                                <i data-lucide="clock" class="w-3.5 h-3.5 text-vectra-emerald"></i>
+                                <span>Срок: 3–4 дня</span>
+                            </div>
+                            <h3 class="text-2xl font-display font-bold text-white">Под ключ</h3>
+                            <p class="text-slate-400 text-sm mt-1.5">Максимальный запуск, если нет текстов, домена и хостинга</p>
+                        </div>
+
+                        <div class="mb-6 pb-6 border-b border-obsidian-border flex items-baseline gap-2">
+                            <span class="text-3xl sm:text-4xl font-display font-extrabold text-white">7 500 ₽</span>
+                            <span class="text-slate-400 text-sm">/ всё включено</span>
+                        </div>
+
+                        <ul class="space-y-3.5 text-sm text-slate-300 mb-8 flex-1">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span><strong>Всё, что входит в тариф «Бизнес»</strong></span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span>Написание продающих текстов и заголовков под вашу нишу</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="server" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span><strong>Помощь с выбором и полная настройка любого хостинга и домена .ru/.рф под ключ</strong> (оплата хостинга напрямую провайдеру)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span>Настройка SSL-сертификата (HTTPS) и полная передача прав доступа</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="check" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                <span>Добавление ссылки на новый сайт в Яндекс Карты и Авито</span>
+                            </li>
+                        </ul>
+
+                        <button type="button" onclick="selectPlan('Под ключ — 7 500 ₽')" class="w-full py-3.5 px-5 rounded-xl bg-obsidian-hover hover:bg-vectra-emerald border border-obsidian-border hover:border-vectra-emerald text-white font-semibold text-sm sm:text-base transition-all touch-target">
+                            Выбрать Под ключ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Прозрачное пояснение по доменам и хостингу -->
+                <div class="mt-8 sm:mt-10 p-5 sm:p-6 rounded-2xl bg-obsidian-card/80 border border-obsidian-border flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-vectra-indigo/15 text-vectra-indigo flex items-center justify-center shrink-0">
+                        <i data-lucide="info" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-xs sm:text-sm text-slate-300 leading-relaxed space-y-1.5">
+                        <div class="font-bold text-white text-sm sm:text-base">Вы сами выбираете удобный вариант размещения сайта</div>
+                        <p>
+                            Мы не привязываем вас к конкретной платформе — вы свободны выбрать любой подходящий хостинг: разместить сайт на надёжном <strong>бесплатном хостинге без ежемесячной платы (0 ₽/мес)</strong> или подключить <strong>собственный домен <span class="text-slate-200 font-mono text-xs">.ru</span> / <span class="text-slate-200 font-mono text-xs">.рф</span></strong> на любом выбранном вами российском провайдере (обычно около 200 ₽/мес напрямую провайдеру).
+                        </p>
+                        <p>
+                            В любом из вариантов все файлы, аккаунт и доступы оформляются исключительно на вас — сайт полностью принадлежит только вам.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ПРИМЕРЫ РАБОТ И ИНТЕРАКТИВНЫЙ ПРЕДПРОСМОТР ==================== -->
+        <section id="portfolio" class="py-14 sm:py-24 bg-obsidian-surface/60 border-y border-obsidian-border">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-14">
+                    <div>
+                        <span class="text-vectra-indigo font-semibold text-xs sm:text-sm uppercase tracking-wider">Портфолио VECTRA</span>
+                        <h2 class="section-title font-display font-bold text-white mt-2">Живые примеры сайтов для бизнеса</h2>
+                    </div>
+                    <p class="text-slate-400 text-sm sm:text-base max-w-md">
+                        Посмотрите, как выглядят реальные сайты с прайсом, кейсами и записью. Нажмите «Открыть живой макет», чтобы пролистать весь сайт целиком.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-7">
+                    <!-- Макет 1: Студия эстетики и маникюра LUNA NAILS -->
+                    <article class="rounded-3xl bg-obsidian-card border border-obsidian-border overflow-hidden card-elevate flex flex-col">
+                        <!-- Окно мини-браузера -->
+                        <div class="bg-[#181416] border-b border-obsidian-border">
+                            <!-- Панель браузера -->
+                            <div class="px-3.5 py-2 bg-[#120f11] border-b border-white/5 flex items-center justify-between">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                                </div>
+                                <div class="px-2.5 py-0.5 rounded bg-white/5 text-[10px] text-stone-400 font-mono truncate max-w-[160px]">
+                                    luna-nails.ru
+                                </div>
+                                <span class="text-[10px] text-rose-300 font-semibold">SSL</span>
+                            </div>
+
+                            <!-- Мини-интерфейс сайта LUNA NAILS -->
+                            <div class="p-4 bg-gradient-to-b from-[#f8f3ef] to-[#efe5de] text-stone-900">
+                                <!-- Мини-шапка -->
+                                <div class="flex items-center justify-between text-[10px] font-bold tracking-widest uppercase text-stone-700 pb-2.5 mb-2.5 border-b border-stone-300/80">
+                                    <span class="text-rose-950 font-extrabold">LUNA NAILS</span>
+                                    <span class="px-2 py-0.5 rounded-full bg-rose-900/10 text-rose-900">Прайс • Работы</span>
+                                </div>
+
+                                <!-- Первый экран мини-сайта -->
+                                <div class="grid grid-cols-12 gap-2.5 items-center mb-3">
+                                    <div class="col-span-7">
+                                        <span class="inline-block text-[9px] font-semibold uppercase tracking-wider text-rose-800 bg-rose-200/70 px-2 py-0.5 rounded mb-1">
+                                            Стерильность 100%
+                                        </span>
+                                        <h4 class="text-xs sm:text-[13px] font-extrabold text-stone-900 leading-tight">
+                                            Идеальный маникюр и педикюр за 90 минут
+                                        </h4>
+                                        <p class="text-[10px] text-stone-600 mt-1 leading-snug">
+                                            Гарантия покрытия 3 недели. Палитра 250+ оттенков.
+                                        </p>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="aspect-square rounded-xl overflow-hidden border border-stone-300 shadow-sm relative bg-rose-200">
+                                            <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=320&q=80" alt="Маникюр LUNA NAILS" onerror="this.src='https://placehold.co/300x300/f3e5e1/881337?text=LUNA+NAILS'" class="w-full h-full object-cover">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Мини-прайс внутри карточки -->
+                                <div class="bg-white/85 rounded-xl p-2.5 border border-stone-200/90 space-y-1.5 mb-2.5">
+                                    <div class="flex items-center justify-between text-[11px]">
+                                        <span class="text-stone-700 font-medium">Маникюр + гель-лак</span>
+                                        <span class="font-bold text-rose-900">1 900 ₽</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-[11px] border-t border-stone-100 pt-1">
+                                        <span class="text-stone-700 font-medium">Смарт-педикюр полный</span>
+                                        <span class="font-bold text-rose-900">2 500 ₽</span>
+                                    </div>
+                                </div>
+
+                                <!-- Мини-кнопка -->
+                                <div class="w-full py-1.5 px-3 rounded-lg bg-[#7f1d3a] text-white text-[11px] font-semibold text-center shadow-sm">
+                                    Записаться онлайн в Telegram
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Описание карточки -->
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-1.5">
+                                    <span class="text-xs font-semibold text-rose-400">Бьюти и эстетика</span>
+                                    <span class="text-[11px] text-slate-400">Тариф «Бизнес»</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white mb-2">Студия маникюра LUNA NAILS</h3>
+                                <p class="text-slate-400 text-sm leading-relaxed mb-5">
+                                    Нежный премиальный дизайн в пудрово-бордовой палитре: галерея работ, прозрачный прайс-лист, отзывы клиенток и мгновенная запись в Telegram.
+                                </p>
+                            </div>
+                            <button type="button" onclick="openPreview('beauty')" class="w-full py-3.5 px-4 rounded-xl bg-obsidian-hover hover:bg-vectra-indigo text-white border border-obsidian-border hover:border-vectra-indigo text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 touch-target">
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                                <span>Открыть живой макет</span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Макет 2: Автоподбор и выездная диагностика AUTO-EXPERT -->
+                    <article class="rounded-3xl bg-obsidian-card border border-obsidian-border overflow-hidden card-elevate flex flex-col">
+                        <!-- Окно мини-браузера -->
+                        <div class="bg-[#141519] border-b border-obsidian-border">
+                            <!-- Панель браузера -->
+                            <div class="px-3.5 py-2 bg-[#0d0e11] border-b border-white/5 flex items-center justify-between">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                                </div>
+                                <div class="px-2.5 py-0.5 rounded bg-white/5 text-[10px] text-slate-400 font-mono truncate max-w-[160px]">
+                                    auto-expert-pro.ru
+                                </div>
+                                <span class="text-[10px] text-amber-400 font-semibold">SSL</span>
+                            </div>
+
+                            <!-- Мини-интерфейс сайта AUTO-EXPERT -->
+                            <div class="p-4 bg-gradient-to-b from-[#1b1d24] to-[#131419] text-white">
+                                <!-- Мини-шапка -->
+                                <div class="flex items-center justify-between text-[10px] font-extrabold tracking-wider uppercase pb-2.5 mb-2.5 border-b border-white/10">
+                                    <span class="flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                        <span>AUTO-EXPERT</span>
+                                    </span>
+                                    <span class="text-amber-400">140+ пунктов проверки</span>
+                                </div>
+
+                                <!-- Первый экран мини-сайта -->
+                                <div class="grid grid-cols-12 gap-2.5 items-center mb-3">
+                                    <div class="col-span-7">
+                                        <span class="inline-block text-[9px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded mb-1">
+                                            Отчет за 60 мин
+                                        </span>
+                                        <h4 class="text-xs sm:text-[13px] font-extrabold text-white leading-tight">
+                                            Проверка авто перед покупкой за 60 минут
+                                        </h4>
+                                        <p class="text-[10px] text-slate-400 mt-1 leading-snug">
+                                            Толщиномер, эндоскоп ДВС, сканер и юридическая чистота.
+                                        </p>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="aspect-square rounded-xl overflow-hidden border border-white/15 shadow-sm relative bg-zinc-800">
+                                            <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=320&q=80" alt="Автоподбор AUTO-EXPERT" onerror="this.src='https://placehold.co/300x300/1f2937/f59e0b?text=AUTO+EXPERT'" class="w-full h-full object-cover">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Мини-прайс внутри карточки -->
+                                <div class="bg-white/5 rounded-xl p-2.5 border border-white/10 space-y-1.5 mb-2.5">
+                                    <div class="flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-300">Разовый выездной осмотр</span>
+                                        <span class="font-bold text-amber-400">3 500 ₽</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-[11px] border-t border-white/10 pt-1">
+                                        <span class="text-slate-300">Автоподбор «под ключ»</span>
+                                        <span class="font-bold text-amber-400">25 000 ₽</span>
+                                    </div>
+                                </div>
+
+                                <!-- Мини-кнопка -->
+                                <div class="w-full py-1.5 px-3 rounded-lg bg-amber-500 text-zinc-950 text-[11px] font-extrabold text-center shadow-sm">
+                                    Заказать проверку авто
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Описание карточки -->
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-1.5">
+                                    <span class="text-xs font-semibold text-amber-400">Автоуслуги и диагностика</span>
+                                    <span class="text-[11px] text-slate-400">Тариф «Бизнес»</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white mb-2">Автоподбор AUTO-EXPERT</h3>
+                                <p class="text-slate-400 text-sm leading-relaxed mb-5">
+                                    Строгий индустриальный стиль: оффер с выездом за 60 минут, 4 этапа проверки приборами, четкие тарифы и быстрая заявка по VIN или ссылке.
+                                </p>
+                            </div>
+                            <button type="button" onclick="openPreview('mentor')" class="w-full py-3.5 px-4 rounded-xl bg-obsidian-hover hover:bg-vectra-indigo text-white border border-obsidian-border hover:border-vectra-indigo text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 touch-target">
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                                <span>Открыть живой макет</span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Макет 3: Репетитор по математике и подготовке к ЕГЭ/ОГЭ -->
+                    <article class="rounded-3xl bg-obsidian-card border border-obsidian-border overflow-hidden card-elevate flex flex-col">
+                        <!-- Окно мини-браузера -->
+                        <div class="bg-[#101827] border-b border-obsidian-border">
+                            <!-- Панель браузера -->
+                            <div class="px-3.5 py-2 bg-[#0b111d] border-b border-white/5 flex items-center justify-between">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                                </div>
+                                <div class="px-2.5 py-0.5 rounded bg-white/5 text-[10px] text-slate-400 font-mono truncate max-w-[160px]">
+                                    math-ege-pro.ru
+                                </div>
+                                <span class="text-[10px] text-emerald-400 font-semibold">SSL</span>
+                            </div>
+
+                            <!-- Мини-интерфейс сайта Репетитора -->
+                            <div class="p-4 bg-gradient-to-b from-[#0f172a] to-[#0b1322] text-white">
+                                <!-- Мини-шапка -->
+                                <div class="flex items-center justify-between text-[10px] font-bold tracking-wider uppercase pb-2.5 mb-2.5 border-b border-sky-500/20">
+                                    <span class="text-sky-300 font-extrabold">MATH • ЕГЭ / ОГЭ</span>
+                                    <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Ср. балл 86+</span>
+                                </div>
+
+                                <!-- Первый экран мини-сайта -->
+                                <div class="grid grid-cols-12 gap-2.5 items-center mb-3">
+                                    <div class="col-span-7">
+                                        <span class="inline-block text-[9px] font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-500/15 px-2 py-0.5 rounded mb-1">
+                                            Онлайн • МГУ
+                                        </span>
+                                        <h4 class="text-xs sm:text-[13px] font-extrabold text-white leading-tight">
+                                            Подготовка к ЕГЭ и ОГЭ по математике на 85+ баллов
+                                        </h4>
+                                        <p class="text-[10px] text-slate-300 mt-1 leading-snug">
+                                            Понятные разборы второй части без зубрежки.
+                                        </p>
+                                    </div>
+                                    <div class="col-span-5">
+                                        <div class="aspect-square rounded-xl overflow-hidden border border-sky-400/25 shadow-sm relative bg-slate-800">
+                                            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=320&q=80" alt="Репетитор по математике ЕГЭ ОГЭ" onerror="this.src='https://placehold.co/300x300/0f172a/38bdf8?text=MATH+86%2B'" class="w-full h-full object-cover">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Мини-прайс внутри карточки -->
+                                <div class="bg-sky-950/50 rounded-xl p-2.5 border border-sky-500/20 space-y-1.5 mb-2.5">
+                                    <div class="flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-200">Пробный урок + диагностика</span>
+                                        <span class="font-bold text-emerald-400">Бесплатно</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-[11px] border-t border-sky-500/15 pt-1">
+                                        <span class="text-slate-200">Индивидуально (60 мин)</span>
+                                        <span class="font-bold text-sky-300">1 600 ₽</span>
+                                    </div>
+                                </div>
+
+                                <!-- Мини-кнопка -->
+                                <div class="w-full py-1.5 px-3 rounded-lg bg-gradient-to-r from-sky-500 to-emerald-500 text-slate-950 text-[11px] font-extrabold text-center shadow-sm">
+                                    Записаться на бесплатный урок
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Описание карточки -->
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-1.5">
+                                    <span class="text-xs font-semibold text-sky-400">Образование и репетиторство</span>
+                                    <span class="text-[11px] text-slate-400">Тариф «Бизнес»</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white mb-2">Репетитор по математике ЕГЭ / ОГЭ</h3>
+                                <p class="text-slate-400 text-sm leading-relaxed mb-5">
+                                    Современный образовательный дизайн: статистика результатов учеников (86+ баллов), формат занятий, расписание и запись на бесплатный пробный урок.
+                                </p>
+                            </div>
+                            <button type="button" onclick="openPreview('repair')" class="w-full py-3.5 px-4 rounded-xl bg-obsidian-hover hover:bg-vectra-indigo text-white border border-obsidian-border hover:border-vectra-indigo text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 touch-target">
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                                <span>Открыть живой макет</span>
+                            </button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== КАК МЫ РАБОТАЕМ (4 ШАГА) ==================== -->
+        <section id="process" class="py-14 sm:py-24">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="max-w-2xl mb-10 sm:mb-14">
+                    <span class="text-vectra-emerald font-semibold text-xs sm:text-sm uppercase tracking-wider">Простой процесс</span>
+                    <h2 class="section-title font-display font-bold text-white mt-2 mb-3">Как проходит работа — 4 шага</h2>
+                    <p class="text-slate-400 text-sm sm:text-lg">
+                        Никаких сложных технических заданий и созвонов на два часа. Всё решаем быстро в переписке в Telegram.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+                    <!-- Шаг 1 -->
+                    <div class="p-6 rounded-3xl bg-obsidian-card border border-obsidian-border relative">
+                        <div class="w-10 h-10 rounded-xl bg-vectra-indigo/15 text-vectra-indigo font-display font-extrabold text-base flex items-center justify-center mb-4">
+                            01
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Короткий бриф в Telegram</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Пишете в <a href="https://t.me/vectra_web" target="_blank" rel="noopener noreferrer" class="text-vectra-indigo hover:underline font-medium">@vectra_web</a> и отвечаете на 4 простых вопроса о ваших услугах, ценах и примерах работ.
+                        </p>
+                    </div>
+
+                    <!-- Шаг 2 -->
+                    <div class="p-6 rounded-3xl bg-obsidian-card border border-obsidian-border relative">
+                        <div class="w-10 h-10 rounded-xl bg-vectra-violet/15 text-vectra-violet font-display font-extrabold text-base flex items-center justify-center mb-4">
+                            02
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Готовый макет за 24 часа</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Уже через сутки вы получаете ссылку на живой прототип сайта, который можно открыть и покликать с телефона.
+                        </p>
+                    </div>
+
+                    <!-- Шаг 3 -->
+                    <div class="p-6 rounded-3xl bg-obsidian-card border border-obsidian-border relative">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/15 text-sky-400 font-display font-extrabold text-base flex items-center justify-center mb-4">
+                            03
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Правки и полировка</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Если нужно поменять цвета, фото или формулировки — оперативно вносим изменения, пока результат не устроит на 100%.
+                        </p>
+                    </div>
+
+                    <!-- Шаг 4 -->
+                    <div class="p-6 rounded-3xl bg-obsidian-card border border-obsidian-border relative">
+                        <div class="w-10 h-10 rounded-xl bg-vectra-emerald/15 text-vectra-emerald font-display font-extrabold text-base flex items-center justify-center mb-4">
+                            04
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Запуск и передача</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Публикуем сайт в интернете, подключаем кнопки приема заявок в ваш Telegram и передаем все файлы и доступы.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ИНТЕРАКТИВНАЯ ФОРМА ЗАЯВКИ ==================== -->
+        <section id="order" class="py-14 sm:py-24 bg-obsidian-surface/60 border-t border-obsidian-border">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6">
+                <div class="rounded-3xl bg-obsidian-card border border-obsidian-border p-5 sm:p-10 lg:p-12 shadow-2xl">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                        
+                        <!-- Левая колонка -->
+                        <div class="lg:col-span-5 space-y-5">
+                            <span class="inline-block px-3 py-1 rounded-lg bg-vectra-indigo/15 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
+                                Быстрый старт
+                            </span>
+                            <h2 class="section-title font-display font-bold text-white">
+                                Готовы запустить свой сайт?
+                            </h2>
+                            <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+                                Заполните форму справа — система автоматически сформирует готовую заявку и откроет диалог в Telegram, чтобы мы могли сразу приступить к работе.
+                            </p>
+
+                            <div class="pt-2">
+                                <a href="https://t.me/vectra_web" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 rounded-2xl bg-vectra-indigo/15 hover:bg-vectra-indigo/25 border border-vectra-indigo/35 text-white transition-all group touch-target">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-11 h-11 rounded-xl bg-vectra-indigo flex items-center justify-center text-white shrink-0">
+                                            <i data-lucide="send" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-sm sm:text-base">Прямой чат в Telegram</div>
+                                            <div class="text-xs text-indigo-200">@vectra_web • Отвечаем быстро</div>
+                                        </div>
+                                    </div>
+                                    <i data-lucide="arrow-up-right" class="w-5 h-5 text-indigo-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Правая колонка: форма -->
+                        <div class="lg:col-span-7 bg-obsidian-bg/90 p-5 sm:p-8 rounded-2xl border border-obsidian-border">
+                            <form id="request-form" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="input-name" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Ваше имя *</label>
+                                        <input type="text" id="input-name" required placeholder="Например: Дмитрий" class="w-full px-4 py-3.5 rounded-xl bg-obsidian-card border border-obsidian-border text-white placeholder-slate-500 focus:outline-none focus:border-vectra-indigo transition-colors text-base sm:text-sm touch-target">
+                                    </div>
+                                    <div>
+                                        <label for="input-niche" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Ваша сфера / услуги *</label>
+                                        <input type="text" id="input-niche" required placeholder="Маникюр, репетитор, ремонт..." class="w-full px-4 py-3.5 rounded-xl bg-obsidian-card border border-obsidian-border text-white placeholder-slate-500 focus:outline-none focus:border-vectra-indigo transition-colors text-base sm:text-sm touch-target">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="input-tariff" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Выберите тариф</label>
+                                    <select id="input-tariff" class="w-full px-4 py-3.5 rounded-xl bg-obsidian-card border border-obsidian-border text-white focus:outline-none focus:border-vectra-indigo transition-colors text-base sm:text-sm touch-target">
+                                        <option value="Бизнес — 4 900 ₽">Бизнес — 4 900 ₽ (Хит продаж)</option>
+                                        <option value="Старт — 2 500 ₽">Старт — 2 500 ₽ (Микро-визитка)</option>
+                                        <option value="Под ключ — 7 500 ₽">Под ключ — 7 500 ₽ (Всё включено)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="input-comment" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Комментарий (необязательно)</label>
+                                    <textarea id="input-comment" rows="2" placeholder="Пожелания по цветам, блокам или ссылка на ваши соцсети" class="w-full px-4 py-3 rounded-xl bg-obsidian-card border border-obsidian-border text-white placeholder-slate-500 focus:outline-none focus:border-vectra-indigo transition-colors text-base sm:text-sm resize-none"></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-vectra-indigo to-vectra-violet hover:opacity-95 text-white font-bold text-base transition-all shadow-lg shadow-vectra-indigo/25 inline-flex items-center justify-center gap-2 touch-target">
+                                    <i data-lucide="send" class="w-4 h-4"></i>
+                                    <span>Отправить заявку в Telegram</span>
+                                </button>
+                            </form>
+
+                            <!-- Блок результата после отправки -->
+                            <div id="request-result" class="hidden space-y-4">
+                                <div class="p-4 rounded-xl bg-vectra-emerald/15 border border-vectra-emerald/35 flex items-start gap-3">
+                                    <i data-lucide="check-circle-2" class="w-5 h-5 text-vectra-emerald shrink-0 mt-0.5"></i>
+                                    <div>
+                                        <div class="font-bold text-white text-sm sm:text-base">Заявка готова к отправке!</div>
+                                        <p class="text-slate-300 text-xs sm:text-sm mt-1">
+                                            Если Telegram не открылся автоматически, нажмите синюю кнопку ниже или скопируйте готовый текст.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 rounded-xl bg-obsidian-card border border-obsidian-border">
+                                    <div class="text-[11px] uppercase tracking-wider text-slate-400 mb-1.5">Сформированное сообщение:</div>
+                                    <pre id="message-preview" class="text-sm text-slate-200 whitespace-pre-wrap font-sans leading-relaxed"></pre>
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <a id="telegram-open-link" href="https://t.me/vectra_web" target="_blank" rel="noopener noreferrer" class="flex-1 py-3.5 px-5 rounded-xl bg-vectra-indigo hover:bg-vectra-indigoHover text-white font-semibold text-sm text-center transition-colors inline-flex items-center justify-center gap-2 touch-target">
+                                        <i data-lucide="send" class="w-4 h-4"></i>
+                                        <span>Открыть Telegram (@vectra_web)</span>
+                                    </a>
+                                    <button type="button" onclick="copyGeneratedText()" class="py-3.5 px-5 rounded-xl bg-obsidian-card hover:bg-obsidian-hover border border-obsidian-border text-slate-200 font-semibold text-sm transition-colors inline-flex items-center justify-center gap-2 touch-target">
+                                        <i data-lucide="copy" class="w-4 h-4"></i>
+                                        <span id="copy-label">Скопировать</span>
+                                    </button>
+                                </div>
+
+                                <button type="button" onclick="resetRequestForm()" class="text-xs text-slate-400 hover:text-white underline block mx-auto pt-1 touch-target">
+                                    Изменить данные заявки
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== ПОДВАЛ (FOOTER) ==================== -->
+    <footer class="border-t border-obsidian-border bg-obsidian-bg py-8 sm:py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+            <div class="flex items-center gap-2.5">
+                <span class="font-display font-extrabold text-white tracking-wider">VECTRA</span>
+                <span>• © 2026 Все права защищены</span>
+            </div>
+            <a href="https://t.me/vectra_web" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-obsidian-card hover:bg-obsidian-hover border border-obsidian-border text-slate-200 hover:text-white font-medium transition-colors touch-target">
+                <i data-lucide="send" class="w-4 h-4 text-vectra-indigo"></i>
+                <span>Telegram: @vectra_web</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- ==================== МОДАЛЬНОЕ ОКНО ИНТЕРАКТИВНОГО ПРЕДПРОСМОТРА ==================== -->
+    <div id="preview-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
+        <div class="bg-obsidian-card border border-obsidian-border rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+            <!-- Верхняя панель модального окна -->
+            <div class="px-4 sm:px-6 py-3.5 bg-obsidian-surface border-b border-obsidian-border flex items-center justify-between gap-2 shrink-0">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span class="w-2.5 h-2.5 rounded-full bg-vectra-emerald shrink-0"></span>
+                    <span id="preview-title-bar" class="text-xs sm:text-sm font-semibold text-slate-200 truncate">Предпросмотр макета</span>
+                </div>
+
+                <!-- Переключатель вида: Смартфон / ПК -->
+                <div class="flex items-center gap-1.5 bg-obsidian-bg p-1 rounded-xl border border-obsidian-border shrink-0">
+                    <button type="button" id="btn-view-mobile" onclick="switchPreviewDevice('mobile')" class="px-2.5 py-1.5 rounded-lg bg-vectra-indigo text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors">
+                        <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Смартфон</span>
+                    </button>
+                    <button type="button" id="btn-view-desktop" onclick="switchPreviewDevice('desktop')" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors">
+                        <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">ПК</span>
+                    </button>
+                </div>
+
+                <button type="button" onclick="closePreview()" aria-label="Закрыть предпросмотр" class="w-9 h-9 rounded-xl bg-obsidian-hover text-slate-300 hover:text-white inline-flex items-center justify-center shrink-0">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Тело предпросмотра -->
+            <div class="p-3 sm:p-6 overflow-y-auto flex-1 bg-obsidian-bg/80">
+                <div id="preview-frame" class="mx-auto transition-all duration-300 max-w-[380px] rounded-[28px] border-[3px] border-obsidian-border bg-obsidian-surface overflow-hidden shadow-2xl">
+                    <!-- Динамический контент макета -->
+                </div>
+            </div>
+
+            <!-- Нижняя панель действий -->
+            <div class="px-4 sm:px-6 py-3.5 bg-obsidian-surface border-t border-obsidian-border flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                <span class="text-xs text-slate-400 text-center sm:text-left">Адаптируем этот дизайн под ваши услуги за 1–3 дня</span>
+                <button type="button" onclick="orderFromPreview()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-vectra-indigo hover:bg-vectra-indigoHover text-white text-sm font-semibold transition-colors touch-target">
+                    Заказать такой сайт
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация иконок Lucide
+        lucide.createIcons();
+
+        // Мобильное меню (бургер)
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileDrawer = document.getElementById('mobile-drawer');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        function toggleMobileMenu(forceClose = false) {
+            const isOpen = mobileDrawer.classList.contains('open');
+            if (isOpen || forceClose) {
+                mobileDrawer.classList.remove('open');
+                menuIconOpen.classList.remove('hidden');
+                menuIconClose.classList.add('hidden');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            } else {
+                mobileDrawer.classList.add('open');
+                menuIconOpen.classList.add('hidden');
+                menuIconClose.classList.remove('hidden');
+                mobileMenuBtn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', () => toggleMobileMenu());
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => toggleMobileMenu(true));
+        });
+
+        // Выбор тарифа с переходом к форме
+        function selectPlan(tariffValue) {
+            const tariffSelect = document.getElementById('input-tariff');
+            tariffSelect.value = tariffValue;
+            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                document.getElementById('input-name').focus();
+            }, 550);
+        }
+
+        // Обработка формы и отправка в Telegram (@vectra_web)
+        const TELEGRAM_HANDLE = 'vectra_web';
+        const requestForm = document.getElementById('request-form');
+        const requestResult = document.getElementById('request-result');
+        const messagePreview = document.getElementById('message-preview');
+        const telegramOpenLink = document.getElementById('telegram-open-link');
+
+        requestForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('input-name').value.trim();
+            const niche = document.getElementById('input-niche').value.trim();
+            const tariff = document.getElementById('input-tariff').value;
+            const comment = document.getElementById('input-comment').value.trim();
+
+            let messageText = `Здравствуйте! Хочу заказать сайт в VECTRA.\n\n• Имя: ${name}\n• Сфера / услуги: ${niche}\n• Тариф: ${tariff}`;
+            if (comment) {
+                messageText += `\n• Комментарий: ${comment}`;
+            }
+
+            const tgUrl = `https://t.me/${TELEGRAM_HANDLE}?text=${encodeURIComponent(messageText)}`;
+
+            messagePreview.textContent = messageText;
+            telegramOpenLink.href = tgUrl;
+
+            requestForm.classList.add('hidden');
+            requestResult.classList.remove('hidden');
+
+            // Пробуем сразу открыть Telegram в новой вкладке
+            window.open(tgUrl, '_blank', 'noopener,noreferrer');
+        });
+
+        function copyGeneratedText() {
+            const text = messagePreview.textContent;
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const copyLabel = document.getElementById('copy-label');
+            copyLabel.textContent = 'Скопировано!';
+            setTimeout(() => {
+                copyLabel.textContent = 'Скопировать';
+            }, 2000);
+        }
+
+        function resetRequestForm() {
+            requestResult.classList.add('hidden');
+            requestForm.classList.remove('hidden');
+        }
+
+        // Полноценные многосекционные живые макеты для модального окна предпросмотра
+        const previewTemplates = {
+            beauty: {
+                barTitle: 'Живой макет: Студия эстетики и маникюра LUNA NAILS',
+                render: () => `
+                    <div class="bg-[#faf6f3] text-stone-900 font-sans">
+                        <!-- Шапка демо-сайта -->
+                        <div class="px-5 py-3.5 bg-white/90 backdrop-blur border-b border-stone-200 flex items-center justify-between sticky top-0 z-10">
+                            <div class="font-extrabold tracking-widest text-sm text-[#7f1d3a]">LUNA NAILS</div>
+                            <div class="flex items-center gap-3 text-xs font-medium text-stone-600">
+                                <span>Услуги</span>
+                                <span>Работы</span>
+                                <span class="px-3 py-1.5 rounded-full bg-[#7f1d3a] text-white font-semibold">Запись</span>
+                            </div>
+                        </div>
+
+                        <!-- Первый экран -->
+                        <div class="p-5 sm:p-7 bg-gradient-to-br from-[#faf6f3] via-[#f4ebe5] to-[#eddcd4] border-b border-stone-200">
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
+                                <div class="sm:col-span-7 space-y-3">
+                                    <span class="inline-block px-3 py-1 rounded-full bg-rose-900/10 text-[#7f1d3a] text-xs font-semibold">
+                                        Медицинская стерильность • Опыт 5 лет
+                                    </span>
+                                    <h3 class="text-xl sm:text-2xl font-extrabold text-stone-900 leading-tight">
+                                        Идеальный маникюр с укреплением за 90 минут
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                                        Бережная работа без пропилов, палитра из 250+ премиальных оттенков и гарантия на покрытие 21 день.
+                                    </p>
+                                    <div class="pt-1">
+                                        <button type="button" onclick="orderFromPreview()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#7f1d3a] hover:bg-[#68162f] text-white text-xs sm:text-sm font-bold shadow-lg shadow-rose-900/20">
+                                            Записаться онлайн в Telegram
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-5">
+                                    <div class="rounded-2xl overflow-hidden border-2 border-white shadow-lg aspect-[4/3] sm:aspect-square bg-rose-100">
+                                        <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80" alt="Маникюр LUNA NAILS" onerror="this.src='https://placehold.co/500x500/f3e5e1/881337?text=LUNA+NAILS'" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Галерея работ -->
+                        <div class="p-5 sm:p-7 border-b border-stone-200 bg-white">
+                            <div class="text-xs font-bold uppercase tracking-wider text-[#7f1d3a] mb-1">Портфолио</div>
+                            <h4 class="text-lg font-extrabold text-stone-900 mb-3.5">Примеры работ наших мастеров</h4>
+                            <div class="grid grid-cols-3 gap-2.5">
+                                <div class="aspect-square rounded-xl overflow-hidden bg-stone-100 border border-stone-200">
+                                    <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=300&q=80" alt="Нюдовый маникюр" onerror="this.src='https://placehold.co/300x300/f5ebe0/7f1d3a?text=Nude+Style'" class="w-full h-full object-cover">
+                                </div>
+                                <div class="aspect-square rounded-xl overflow-hidden bg-stone-100 border border-stone-200">
+                                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=300&q=80" alt="Френч дизайн" onerror="this.src='https://placehold.co/300x300/f5ebe0/7f1d3a?text=French+Art'" class="w-full h-full object-cover">
+                                </div>
+                                <div class="aspect-square rounded-xl overflow-hidden bg-stone-100 border border-stone-200">
+                                    <img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=300&q=80" alt="Эстетичный педикюр" onerror="this.src='https://placehold.co/300x300/f5ebe0/7f1d3a?text=Spa+Care'" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Прайс-лист -->
+                        <div class="p-5 sm:p-7 border-b border-stone-200 bg-[#faf6f3]">
+                            <div class="text-xs font-bold uppercase tracking-wider text-[#7f1d3a] mb-1">Прозрачные цены</div>
+                            <h4 class="text-lg font-extrabold text-stone-900 mb-3.5">Услуги и стоимость</h4>
+                            <div class="space-y-2.5">
+                                <div class="p-3.5 rounded-xl bg-white border border-stone-200 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-stone-900">Комплекс: снятие + маникюр + гель-лак</div>
+                                        <div class="text-xs text-stone-500">Выравнивание базой и уход маслом</div>
+                                    </div>
+                                    <span class="font-extrabold text-[#7f1d3a] whitespace-nowrap">1 900 ₽</span>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-white border border-stone-200 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-stone-900">Смарт-педикюр с покрытием</div>
+                                        <div class="text-xs text-stone-500">Обработка стопы дисками + пальчики</div>
+                                    </div>
+                                    <span class="font-extrabold text-[#7f1d3a] whitespace-nowrap">2 500 ₽</span>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-white border border-stone-200 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-stone-900">Наращивание на верхние формы</div>
+                                        <div class="text-xs text-stone-500">Идеальная архитектура и тонкий торец</div>
+                                    </div>
+                                    <span class="font-extrabold text-[#7f1d3a] whitespace-nowrap">3 100 ₽</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Отзывы и финальная кнопка -->
+                        <div class="p-5 sm:p-7 bg-white space-y-4">
+                            <div class="p-4 rounded-2xl bg-[#faf6f3] border border-stone-200">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-bold text-stone-900">Екатерина М. • Постоянный клиент</span>
+                                    <span class="text-xs text-amber-500 font-bold">★★★★★</span>
+                                </div>
+                                <p class="text-xs text-stone-600 leading-relaxed">
+                                    «Хожу в LUNA NAILS уже полгода — покрытие держится ровно 4 недели без единого скола! Очень уютно, стерильные инструменты вскрывают прямо при тебе.»
+                                </p>
+                            </div>
+                            <button type="button" onclick="orderFromPreview()" class="w-full py-3.5 px-5 rounded-xl bg-[#7f1d3a] text-white font-bold text-sm text-center shadow-md">
+                                Записаться онлайн в Telegram
+                            </button>
+                        </div>
+                    </div>
+                `
+            },
+            mentor: {
+                barTitle: 'Живой макет: Автоподбор и выездная диагностика AUTO-EXPERT',
+                render: () => `
+                    <div class="bg-[#121317] text-white font-sans">
+                        <!-- Шапка демо-сайта -->
+                        <div class="px-5 py-3.5 bg-[#0d0e11] border-b border-white/10 flex items-center justify-between sticky top-0 z-10">
+                            <div class="flex items-center gap-2 font-extrabold tracking-wider text-sm">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                <span>AUTO-EXPERT</span>
+                            </div>
+                            <span class="px-3 py-1 rounded-lg bg-amber-500 text-zinc-950 text-xs font-extrabold">Выезд 60 мин</span>
+                        </div>
+
+                        <!-- Первый экран -->
+                        <div class="p-5 sm:p-7 bg-gradient-to-br from-[#1b1d24] to-[#121317] border-b border-white/10">
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
+                                <div class="sm:col-span-7 space-y-3">
+                                    <span class="inline-block px-3 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold">
+                                        Окупим услуги за счет торга в 90% случаев
+                                    </span>
+                                    <h3 class="text-xl sm:text-2xl font-extrabold text-white leading-tight">
+                                        Проверка авто перед покупкой за 60 минут
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                        Выездная диагностика по 140 пунктам: кузов, эндоскопия цилиндров, реальный пробег во всех блоках и проверка залогов.
+                                    </p>
+                                    <div class="pt-1">
+                                        <button type="button" onclick="orderFromPreview()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs sm:text-sm font-extrabold shadow-lg shadow-amber-500/20">
+                                            Заказать проверку авто
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-5">
+                                    <div class="rounded-2xl overflow-hidden border border-white/15 shadow-lg aspect-[4/3] sm:aspect-square bg-zinc-800">
+                                        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=600&q=80" alt="Диагностика авто AUTO-EXPERT" onerror="this.src='https://placehold.co/500x500/1f2937/f59e0b?text=AUTO+EXPERT'" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4 пункта проверки -->
+                        <div class="p-5 sm:p-7 border-b border-white/10 bg-[#15171c]">
+                            <div class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">Оборудование</div>
+                            <h4 class="text-lg font-extrabold text-white mb-3.5">Что проверяем на выезде</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                                    <div class="text-xs font-extrabold text-amber-400 mb-1">01. Толщиномер Etari</div>
+                                    <div class="text-xs text-slate-300">Замер ЛКП, поиск шпатлевки, сварных швов и снятия элементов.</div>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                                    <div class="text-xs font-extrabold text-amber-400 mb-1">02. Видеоэндоскоп ДВС</div>
+                                    <div class="text-xs text-slate-300">Осмотр задиров в цилиндрах и состояния клапанов без разбора.</div>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                                    <div class="text-xs font-extrabold text-amber-400 mb-1">03. Дилерский сканер</div>
+                                    <div class="text-xs text-slate-300">Сверка пробега в АКПП, ABS и ЭБУ, чтение скрытых ошибок.</div>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                                    <div class="text-xs font-extrabold text-amber-400 mb-1">04. Юр. чистота + фотоотчет</div>
+                                    <div class="text-xs text-slate-300">100+ фото и видео в Telegram в реальном времени.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Тарифы -->
+                        <div class="p-5 sm:p-7 border-b border-white/10 bg-[#121317]">
+                            <div class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">Стоимость услуг</div>
+                            <h4 class="text-lg font-extrabold text-white mb-3.5">Прозрачные тарифы</h4>
+                            <div class="space-y-2.5">
+                                <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Разовый выездной осмотр</div>
+                                        <div class="text-xs text-slate-400">Полная диагностика 1 авто + аргументированный торг</div>
+                                    </div>
+                                    <span class="font-extrabold text-amber-400 text-base whitespace-nowrap">3 500 ₽</span>
+                                </div>
+                                <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/35 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Автоподбор «под ключ»</div>
+                                        <div class="text-xs text-slate-300">Поиск лучшего авто по вашим параметрам до сделки</div>
+                                    </div>
+                                    <span class="font-extrabold text-amber-400 text-base whitespace-nowrap">25 000 ₽</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Отзыв и кнопка -->
+                        <div class="p-5 sm:p-7 bg-[#15171c] space-y-4">
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-bold text-white">Алексей Р. • Mazda CX-5</span>
+                                    <span class="text-xs text-amber-400 font-bold">Торг: -75 000 ₽</span>
+                                </div>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    «Скинул ссылку на объявление, через час эксперт уже прислал видеоотчет с толщиномером и эндоскопом. Сторговали 75 тысяч — услуги окупились в 20 раз!»
+                                </p>
+                            </div>
+                            <button type="button" onclick="orderFromPreview()" class="w-full py-3.5 px-5 rounded-xl bg-amber-500 text-zinc-950 font-extrabold text-sm text-center shadow-md">
+                                Заказать проверку авто
+                            </button>
+                        </div>
+                    </div>
+                `
+            },
+            repair: {
+                barTitle: 'Живой макет: Репетитор по математике и подготовке к ЕГЭ/ОГЭ',
+                render: () => `
+                    <div class="bg-[#0b1322] text-white font-sans">
+                        <!-- Шапка демо-сайта -->
+                        <div class="px-5 py-3.5 bg-[#080e1a] border-b border-sky-500/20 flex items-center justify-between sticky top-0 z-10">
+                            <div class="font-extrabold tracking-wider text-sm text-sky-300">MATH • ЕГЭ / ОГЭ</div>
+                            <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold">Набор 2026</span>
+                        </div>
+
+                        <!-- Первый экран -->
+                        <div class="p-5 sm:p-7 bg-gradient-to-br from-[#0f172a] via-[#10203a] to-[#0b1322] border-b border-sky-500/20">
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
+                                <div class="sm:col-span-7 space-y-3">
+                                    <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+                                        Выпускник мехмата МГУ • Опыт 7 лет
+                                    </span>
+                                    <h3 class="text-xl sm:text-2xl font-extrabold text-white leading-tight">
+                                        Подготовка к ЕГЭ и ОГЭ по математике на 85+ баллов
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                        Учим понимать логику задач, а не зубрить шаблоны. Средний результат учеников на профильном ЕГЭ — 86,4 балла.
+                                    </p>
+                                    <div class="pt-1">
+                                        <button type="button" onclick="orderFromPreview()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 text-slate-950 text-xs sm:text-sm font-extrabold shadow-lg shadow-sky-500/20">
+                                            Записаться на бесплатный пробный урок
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-5">
+                                    <div class="rounded-2xl overflow-hidden border border-sky-400/25 shadow-lg aspect-[4/3] sm:aspect-square bg-slate-800">
+                                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=600&q=80" alt="Математика ЕГЭ ОГЭ" onerror="this.src='https://placehold.co/500x500/0f172a/38bdf8?text=MATH+86%2B'" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Статистика -->
+                        <div class="p-5 sm:p-7 border-b border-sky-500/20 bg-[#0d1729]">
+                            <div class="grid grid-cols-3 gap-2.5 text-center">
+                                <div class="p-3 rounded-2xl bg-sky-950/60 border border-sky-500/20">
+                                    <div class="text-lg sm:text-xl font-extrabold text-emerald-400">86+</div>
+                                    <div class="text-[11px] text-slate-300 mt-0.5">Средний балл ЕГЭ</div>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-sky-950/60 border border-sky-500/20">
+                                    <div class="text-lg sm:text-xl font-extrabold text-sky-300">120+</div>
+                                    <div class="text-[11px] text-slate-300 mt-0.5">Учеников на бюджете</div>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-sky-950/60 border border-sky-500/20">
+                                    <div class="text-lg sm:text-xl font-extrabold text-emerald-400">100%</div>
+                                    <div class="text-[11px] text-slate-300 mt-0.5">Сдали ОГЭ на 4 и 5</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Формат и цены -->
+                        <div class="p-5 sm:p-7 border-b border-sky-500/20 bg-[#0b1322]">
+                            <div class="text-xs font-bold uppercase tracking-wider text-sky-400 mb-1">Формат и расписание</div>
+                            <h4 class="text-lg font-extrabold text-white mb-3.5">Стоимость занятий</h4>
+                            <div class="space-y-2.5">
+                                <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Пробный урок + план подготовки</div>
+                                        <div class="text-xs text-slate-300">Определим текущий уровень и пробелы за 45 минут</div>
+                                    </div>
+                                    <span class="font-extrabold text-emerald-400 whitespace-nowrap">Бесплатно</span>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-sky-950/50 border border-sky-500/20 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Индивидуальное занятие (60 мин)</div>
+                                        <div class="text-xs text-slate-400">Интерактивная доска Miro + конспекты и ДЗ</div>
+                                    </div>
+                                    <span class="font-extrabold text-sky-300 whitespace-nowrap">1 600 ₽</span>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-sky-950/50 border border-sky-500/20 flex items-center justify-between gap-3">
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Занятия в мини-группе (до 4 чел.)</div>
+                                        <div class="text-xs text-slate-400">2 раза в неделю по 90 минут</div>
+                                    </div>
+                                    <span class="font-extrabold text-sky-300 whitespace-nowrap">950 ₽ / урок</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Отзыв и кнопка -->
+                        <div class="p-5 sm:p-7 bg-[#0d1729] space-y-4">
+                            <div class="p-4 rounded-2xl bg-sky-950/50 border border-sky-500/20">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-xs font-bold text-white">Алина К. • Профиль: 88 баллов</span>
+                                    <span class="text-xs text-emerald-400 font-bold">Поступила в ВШЭ</span>
+                                </div>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    «В сентябре писала пробники на 52 балла и боялась геометрии. За 8 месяцев разобрали все параметры и экономические задачи — на экзамене получила 88!»
+                                </p>
+                            </div>
+                            <button type="button" onclick="orderFromPreview()" class="w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 text-slate-950 font-extrabold text-sm text-center shadow-md">
+                                Записаться на бесплатный пробный урок
+                            </button>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        const previewModal = document.getElementById('preview-modal');
+        const previewTitleBar = document.getElementById('preview-title-bar');
+        const previewFrame = document.getElementById('preview-frame');
+        const btnViewMobile = document.getElementById('btn-view-mobile');
+        const btnViewDesktop = document.getElementById('btn-view-desktop');
+
+        function openPreview(type) {
+            const template = previewTemplates[type];
+            if (!template) return;
+
+            previewTitleBar.textContent = template.barTitle;
+            previewFrame.innerHTML = template.render();
+
+            // На больших экранах по умолчанию показываем вид ПК, на телефонах — вид смартфона
+            if (window.innerWidth >= 640) {
+                switchPreviewDevice('desktop');
+            } else {
+                switchPreviewDevice('mobile');
+            }
+
+            previewModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function switchPreviewDevice(mode) {
+            if (mode === 'mobile') {
+                previewFrame.classList.remove('max-w-full', 'rounded-2xl');
+                previewFrame.classList.add('max-w-[380px]', 'rounded-[28px]');
+                btnViewMobile.classList.add('bg-vectra-indigo', 'text-white');
+                btnViewMobile.classList.remove('text-slate-400');
+                btnViewDesktop.classList.remove('bg-vectra-indigo', 'text-white');
+                btnViewDesktop.classList.add('text-slate-400');
+            } else {
+                previewFrame.classList.remove('max-w-[380px]', 'rounded-[28px]');
+                previewFrame.classList.add('max-w-full', 'rounded-2xl');
+                btnViewDesktop.classList.add('bg-vectra-indigo', 'text-white');
+                btnViewDesktop.classList.remove('text-slate-400');
+                btnViewMobile.classList.remove('bg-vectra-indigo', 'text-white');
+                btnViewMobile.classList.add('text-slate-400');
+            }
+        }
+
+        function closePreview() {
+            previewModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function orderFromPreview() {
+            closePreview();
+            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        previewModal.addEventListener('click', (e) => {
+            if (e.target === previewModal) closePreview();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !previewModal.classList.contains('hidden')) {
+                closePreview();
+            }
+        });
+    </script>
+</body>
+</html>
